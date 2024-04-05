@@ -12,7 +12,8 @@
     "start": "concurrently yarn:start:*",
     "migration:generate": "ts-node migration generate",
     "migration:run": "ts-node migration run",
-    "migration:revert": "ts-node migration revert"
+    "migration:revert": "ts-node migration revert",
+    "populate": "ts-node ./populate"
   },
   "dependencies": {
     "@vendure/admin-ui-plugin": "2.1.9",

@@ -3,16 +3,21 @@ import {
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,
     VendureConfig,
+    ProductVariant,
 } from '@vendure/core';
 import { defaultEmailHandlers, EmailPlugin } from '@vendure/email-plugin';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
 import 'dotenv/config';
 import path from 'path';
+import { OrderPriceStrategy } from './strategies/orderPriceStrategy';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 
 export const config: VendureConfig = {
+    orderOptions: {
+      orderItemPriceCalculationStrategy: new OrderPriceStrategy()
+    },
     apiOptions: {
         port: 3000,
         adminApiPath: 'admin-api',
@@ -60,7 +65,18 @@ export const config: VendureConfig = {
     },
     // When adding or altering custom field definitions, the database will
     // need to be updated. See the "Migrations" section in README.md.
-    customFields: {},
+    customFields: {
+      OrderLine: [
+        {
+          name: 'material',
+          type: 'relation',
+          entity: ProductVariant,
+          eager: true,
+          nullable: true,
+          public: true
+        },
+      ],
+    },
     plugins: [
         AssetServerPlugin.init({
             route: 'assets',
